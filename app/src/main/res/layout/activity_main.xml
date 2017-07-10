@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.campusunfamiliar.widgets.DragLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+    <!--下层 左边的布局-->
+    <include layout="@layout/sideslip_main"/>
+
+    <com.campusunfamiliar.widgets.CustomRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:id="@+id/rl_title"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:gravity="bottom"
+                android:background="@android:color/holo_orange_light"
+                >
+                <RelativeLayout
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="fill_parent"
+                    android:layout_height="49dp"
+                    android:background="@android:color/holo_orange_light"
+                    >
+                    <com.campusunfamiliar.widgets.RoundAngleImageView
+                        android:id="@+id/iv_icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_launcher"
+                        app:roundWidth="17.5dp"
+                        app:roundHeight="17.5dp"/>
+                    <TextView
+                        android:id="@+id/main_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="消息"
+                        android:layout_centerInParent="true"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp"
+                        />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/home_fragment"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+            </FrameLayout>
+
+            <View
+                android:background="#ffd900"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
+
+            <RadioGroup
+                android:id="@+id/home_radioGroup"
+                style="@style/home_wrap"
+                >
+                <RadioButton
+                    android:id="@+id/home_radioButton1"
+                    style="@style/home_rButton"
+                    android:text="消息"
+                    />
+                <RadioButton
+                    android:id="@+id/home_radioButton2"
+                    style="@style/home_rButton"
+                    android:text="联系人"
+                    />
+                <RadioButton
+                    android:id="@+id/home_radioButton3"
+                    style="@style/home_rButton"
+                    android:text="我的"
+                    />
+            </RadioGroup>
+
+        </LinearLayout>
+    </com.campusunfamiliar.widgets.CustomRelativeLayout>
+</com.campusunfamiliar.widgets.DragLayout>
