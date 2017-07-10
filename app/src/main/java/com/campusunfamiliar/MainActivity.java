@@ -1,11 +1,14 @@
 package com.campusunfamiliar;
 
+import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,7 +24,9 @@ import com.campusunfamiliar.utils.SideslipItem;
 import com.joanzapata.android.BaseAdapterHelper;
 import com.joanzapata.android.QuickAdapter;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener
+import java.lang.reflect.Field;
+
+public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener
 {
     private ListView lv;
     private ImageView ivIcon, ivBottom;
@@ -33,14 +38,56 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private NewsFragment newsFragment;
     private ContactsFragment contactsFragment;
     private MineFragment mineFragment;
-
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
         setContentView(R.layout.activity_main);
+        setStatusBar();
         initView1();
         initView2();
+    }
+    /**
+     * 设置沉浸式状态栏
+     */
+    protected void setStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final ViewGroup linear_bar = (ViewGroup) findViewById(R.id.rl_title);
+            final int statusHeight = getStatusBarHeight();
+            linear_bar.post(new Runnable() {
+                @Override
+                public void run() {
+                    int titleHeight = linear_bar.getHeight();
+                    android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) linear_bar.getLayoutParams();
+                    params.height = statusHeight + titleHeight;
+                    linear_bar.setLayoutParams(params);
+                }
+            });
+        }
+    }
+    /**
+     * 获取状态栏的高度
+     * @return
+     */
+    protected int getStatusBarHeight(){
+        try
+        {
+            Class<?> c=Class.forName("com.android.internal.R$dimen");
+            Object obj=c.newInstance();
+            Field field=c.getField("status_bar_height");
+            int x=Integer.parseInt(field.get(obj).toString());
+            return  getResources().getDimensionPixelSize(x);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private void initView1()
@@ -78,53 +125,53 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         switch (checkedId)
         {
             case R.id.home_radioButton1:
-                initFragment1();
-                textView.setText("消息");
+                initFragment(1);
                 break;
             case R.id.home_radioButton2:
-                initFragment2();
-                textView.setText("联系人");
+                initFragment(2);
                 break;
             case R.id.home_radioButton3:
-                initFragment3();
-                textView.setText("我的");
+                initFragment(3);
                 break;
         }
     }
 
-    private void initFragment1()
+    private void initFragment(int i)
     {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(newsFragment == null){
-            newsFragment = new NewsFragment();
-            transaction.add(R.id.home_fragment,newsFragment);
+        Fragment fragment = null;
+        switch (i)
+        {
+            case 1:
+                if(newsFragment == null)
+                {
+                    newsFragment = new NewsFragment("消息");
+                    transaction.add(R.id.home_fragment,newsFragment);
+                }
+                fragment = newsFragment;
+                textView.setText(newsFragment.getName());
+                break;
+            case 2:
+                if(contactsFragment == null)
+                {
+                    contactsFragment = new ContactsFragment("联系人");
+                    transaction.add(R.id.home_fragment,contactsFragment);
+                }
+                fragment = contactsFragment;
+                textView.setText(contactsFragment.getName());
+                break;
+            case 3:
+                if(mineFragment == null)
+                {
+                    mineFragment = new MineFragment("我的");
+                    transaction.add(R.id.home_fragment,mineFragment);
+                }
+                fragment = mineFragment;
+                textView.setText(mineFragment.getName());
+                break;
         }
         hideFragment(transaction);
-        transaction.show(newsFragment);
-        transaction.commit();
-    }
-
-    private void initFragment2()
-    {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(contactsFragment == null){
-            contactsFragment = new ContactsFragment();
-            transaction.add(R.id.home_fragment,contactsFragment);
-        }
-        hideFragment(transaction);
-        transaction.show(contactsFragment);
-        transaction.commit();
-    }
-
-    private void initFragment3()
-    {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(mineFragment == null){
-            mineFragment = new MineFragment();
-            transaction.add(R.id.home_fragment,mineFragment);
-        }
-        hideFragment(transaction);
-        transaction.show(mineFragment);
+        transaction.show(fragment);
         transaction.commit();
     }
 

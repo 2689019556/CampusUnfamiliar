@@ -15,10 +15,22 @@ import com.campusunfamiliar.R;
 public class MineFragment extends Fragment
 {
     private View mView;
+    private String name;
+
+    public MineFragment(String name)
+    {
+        this.name = name;
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(mView==null){
             mView=inflater.inflate(R.layout.fragment_mine,container,false);
         }
         return mView;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }

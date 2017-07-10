@@ -12,10 +12,21 @@ import com.campusunfamiliar.R;
 public class NewsFragment extends Fragment
 {
     private View mView;
+    private String name;
+
+    public NewsFragment(String name)
+    {
+        this.name = name;
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(mView==null){
             mView=inflater.inflate(R.layout.fragment_news,container,false);
         }
         return mView;
+    }
+    public String getName()
+    {
+        return name;
     }
 }
