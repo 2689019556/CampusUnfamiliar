@@ -3,4 +3,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">示例id</string>
+    <string name="signature">lalalalalalalalalalalalalaasasasasasasasasasasasasasasasasasas</string>
+    <string name="btn_change_password">修改密码</string>
+    <string name="btn_modified_data">修改资料</string>
+    <string name="gender">性别：</string>
+    <string name="birthday">生日：</string>
+    <string name="profession">职业：</string>
 </resources>
